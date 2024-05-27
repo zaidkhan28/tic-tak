@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tik tac toe</title>
+    
+    <style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-style: normal;
+
+}
+
+        body{
+            margin: 0px;
+            box-sizing: border-box;
+            padding: 0px;
+            font-family: sans-serif;
+            background-image: url(solstice-hannan--yhBOqHOr0c-unsplash.jpg);
+            background-position:center ;
+            background-repeat: no-repeat;
+            background-size:cover;
+            box-sizing: border-box;
+        }
+
+        @media (max-width:500px){
+    body{
+       display: flex;
+    }
+    
+}
+        
+
+
+        #header-text{
+            font: 50px;
+            color: rgb(10, 66, 66);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        .main{
+            
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .container{
+            display: flex;
+            display: grid;
+            grid-template-columns: auto auto auto;
+            background-color: darkgray;
+            margin-top: 40px;
+            padding: 1px;
+            
+        }
+
+        .box{
+           
+            background: white;
+            height: 150px;
+            width: 150px;
+            border: 1px solid darkgray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 100px;
+            color: darkslategray;
+            cursor: pointer;
+        }
+
+        @media (max-width:500px){
+    .box{
+       width: 110px;
+       
+    }
+    
+}
+
+        
+
+        #resetBtn{
+            background-color: indigo;
+            border-radius: 10px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+     <div class="main">
+     <h1 id="header-text">let's play</h1>
+     <button id="resetBtn">Reset</button>
+     <div class="container">
+        <div class="box" id="0"></div>
+        <div class="box" id="1"></div>
+        <div class="box" id="2"></div>
+        <div class="box" id="3"></div>
+        <div class="box" id="4"></div>
+        <div class="box" id="5"></div>
+        <div class="box" id="6"></div>
+        <div class="box" id="7"></div>
+        <div class="box" id="8"></div>
+     </div>
+    </div>
+     
+<script>
+    const boxes = Array.from(document.getElementsByClassName('box'));
+    const resetBtn = document.getElementById('resetBtn');
+    resetBtn.addEventListener('click',reset);
+    const headerText =document.getElementById('header-text')
+    const areas = [null,null,null,null,null,null,null,null,null,];
+    const o_text ="0";
+    const x_text ="x";
+    let currentplayer = o_text;
+    let winBoxesIds=[];
+
+    function bindClickEvent(){
+        boxes.forEach(box=>{
+            box.addEventListener('click',handleBoxClick);
+        })
+    }
+
+
+  bindClickEvent();
+
+
+    function handleBoxClick(e){
+        if(winBoxesIds.length > 0){
+            return
+        }
+      const id = e . target . id;
+      if(!areas[id]){
+         areas[id] = currentplayer;
+         e.target.innerHTML = currentplayer;
+
+         if(hasPlayerWon(currentplayer)){
+           headerText.innerHTML= ` ${currentplayer} has won !!`;
+           headerText.style.background='lightgreen';
+           changeWinBoxesBg();
+           return
+         }
+         currentplayer = currentplayer === o_text ? x_text : o_text;
+    }
+
+}
+
+function hasPlayerWon(cplayer){
+    if(areas[0] === cplayer){
+    if(areas[1] === cplayer && areas [2] === cplayer){
+        winBoxesIds =[0,1,2];
+        return true;
+    }
+    if(areas[3] === cplayer && areas [6] === cplayer){
+        winBoxesIds =[0,3,6];
+        return true;
+    }
+    if(areas[4] === cplayer && areas [8] === cplayer){
+        winBoxesIds =[0,4,8];
+        return true;
+    }
+    }
+    if(areas[4] === cplayer){
+        if(areas[1] === cplayer && areas [7] === cplayer){
+        winBoxesIds =[4,1,7];
+        return true;
+        }
+        if(areas[2] === cplayer && areas [6] === cplayer){
+        winBoxesIds =[4,2,6];
+        return true;
+        }
+        if(areas[3] === cplayer && areas [5] === cplayer){
+        winBoxesIds =[4,3,5];
+        return true;
+        }
+    }
+    if(areas[8] === cplayer){
+        if(areas[7] === cplayer && areas [6] === cplayer){
+        winBoxesIds =[8,7,6];
+        return true;
+        }
+        if(areas[5] === cplayer && areas [2] === cplayer){
+        winBoxesIds =[8,5,2];
+        return true;
+        }
+
+    }
+        
+}
+
+
+   function changeWinBoxesBg(){
+    winBoxesIds.forEach(id=>{
+
+    boxes[id].style.background='lightgreen'
+
+    })
+    boxes.forEach(box=>{
+        box.style.cursor = 'not-allowed'
+    })
+   }
+
+    function reset(){
+     winBoxesIds =[];
+     areas.forEach((val,index)=>{
+      areas[index] = null;
+     })
+     boxes.forEach(box=>{
+        box.innerHTML = '';
+        box.style.background ='';
+        box.style.cursor = 'pointer'
+     })
+     headerText.innerHTML= "let's play..";
+     headerText.style.background = "";
+     currentplayer = o_text;
+
+    }
+</script>
+    
+        
+</body>
+</html>
